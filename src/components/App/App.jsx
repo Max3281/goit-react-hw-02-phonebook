@@ -29,15 +29,14 @@ class App extends Component {
   };
 
   formSubmit = ({ name, number }) => {
-    let checkAlert = false;
+    const checkAlert = this.state.contacts.some(
+      f => f.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+    );
 
-    this.state.contacts.map(f => {
-      if (f.name === name) {
-        alert(`${name} is already in contacts`);
-        return (checkAlert = true);
-      }
-      return f;
-    });
+    if (checkAlert) {
+      alert(`${name} is already in contacts`);
+      return;
+    }
 
     const newContact = {
       id: nanoid(9),
@@ -45,11 +44,9 @@ class App extends Component {
       number: number,
     };
 
-    if (checkAlert === false) {
-      this.setState(prevState => ({
-        contacts: [newContact, ...prevState.contacts],
-      }));
-    }
+    this.setState(prevState => ({
+      contacts: [newContact, ...prevState.contacts],
+    }));
   };
 
   render() {
